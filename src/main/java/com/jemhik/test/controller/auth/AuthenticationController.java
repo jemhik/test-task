@@ -1,5 +1,6 @@
 package com.jemhik.test.controller.auth;
 
+import com.jemhik.test.api.AuthApi;
 import com.jemhik.test.dto.AuthenticationRequest;
 import com.jemhik.test.dto.RefreshTokenRequest;
 import com.jemhik.test.dto.RefreshTokenResponse;
@@ -14,23 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController implements AuthApi {
 
   private final AuthenticationService service;
 
-  @PostMapping("/signup")
+  @Override
   public ResponseEntity<AuthenticationResponse> signUp(@RequestBody RegisterRequest request) {
     return ResponseEntity.ok(service.signUp(request));
   }
 
-  @PostMapping("/authentication")
+  @Override
   public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
     return ResponseEntity.ok(service.authenticate(request));
   }
 
-  @PostMapping("/refresh")
+  @Override
   public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
     return ResponseEntity.ok(service.refresh(request));
   }

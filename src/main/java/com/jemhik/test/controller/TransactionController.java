@@ -1,5 +1,6 @@
 package com.jemhik.test.controller;
 
+import com.jemhik.test.api.TransactionApi;
 import com.jemhik.test.dto.TransactionDto;
 import com.jemhik.test.service.TransactionService;
 import com.jemhik.test.service.impl.PdfService;
@@ -17,25 +18,24 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/transactions")
 @RequiredArgsConstructor
-public class TransactionController {
+public class TransactionController implements TransactionApi {
 
   private final TransactionService transactionService;
   private final PdfService pdfService;
 
-  @PostMapping(path = "/import-to-db")
+  @Override
   public ResponseEntity<String> importTransactionsFromExcelToDb(@RequestPart(required = true) List<MultipartFile> files) {
     transactionService.importToDb(files);
     return ResponseEntity.ok("Success");
   }
 
-  @GetMapping("/listRecords")
+  @Override
   public ResponseEntity<List<TransactionDto>> listAllRecords() {
     return ResponseEntity.ok(transactionService.listAllRecords());
   }
 
-  @GetMapping("/export-to-pdf")
+  @Override
   public void generatePdfFile(HttpServletResponse response) throws DocumentException, IOException {
     response.setContentType("application/pdf");
     DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
